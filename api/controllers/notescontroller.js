@@ -32,7 +32,7 @@ exports.readNote = (req, res) => {
 };
 
 exports.updateNote = (req, res) => {
-    Note.findAndUpdate({ _id: req.params.noteID }, req.body, { new: true }, (err, note) => {
+    Note.findOneAndUpdate({ _id: req.params.noteID }, req.body, { new: true }, (err, note) => {
         if (err) {
             res.send(err);
         }
@@ -41,7 +41,7 @@ exports.updateNote = (req, res) => {
 };
 
 exports.deleteNote = (req, res) => {
-    Note.remove({
+    Note.deleteOne({
         _id: req.params.noteID
     }, (err, _) => {
         if (err) {
