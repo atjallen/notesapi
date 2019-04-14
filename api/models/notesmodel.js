@@ -1,7 +1,9 @@
 'use strict';
-import { Schema, model } from 'mongoose';
 
-let NotesSchema = new Schema({
+let mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
+
+let NoteSchema = new Schema({
     title: String,
     body: String,
     archived: {
@@ -10,4 +12,4 @@ let NotesSchema = new Schema({
     }
 });
 
-export default model('Notes', NotesSchema);
+module.exports = mongoose.model('Note', NoteSchema);
