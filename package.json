@@ -13,7 +13,7 @@
     "API"
   ],
   "author": "Ashley Allen",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.18.11"
   },
