@@ -8,7 +8,7 @@ module.exports = (app) => {
         .post(cont.createNote);
 
     app.route('/notes/:noteID')
-        .get(cont.readNote)
-        .put(cont.updateNote)
+        .get(cont.getNote)
+        .patch(cont.updateNote)
         .delete(cont.deleteNote);
 };

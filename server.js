@@ -14,6 +14,9 @@ mongoose.connect('mongodb://localhost/NotesDB');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 routes(app);
+app.use((req, res) => {
+    res.status(404).send({ error: req.originalUrl + ' not found' })
+});
 app.listen(port);
 
 console.log('Notes server started on port ' + port);
