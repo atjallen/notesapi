@@ -37,7 +37,7 @@ All requests and responses should conform to the [JSON:API specification](https:
         "attributes": {
             "title": "[Note title]",
             "body": "[Note body]",
-            "archived": true/false
+            "archived": false
         }
     }
 }
