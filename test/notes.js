@@ -1,7 +1,5 @@
 'use strict'
 
-process.env.NODE_ENV = 'test';
-
 let mongoose = require('mongoose'),
     Note = require('../api/models/notemodel'),
     chai = require('chai'),
@@ -11,7 +9,7 @@ let mongoose = require('mongoose'),
 
 chai.use(chaiHttp);
 
-const apiNote = {
+const testAPINote = {
     type: "note",
     attributes: {
         title: 'Test title',
@@ -20,7 +18,7 @@ const apiNote = {
     }
 }
 
-const dbNote = {
+const testDBNote = {
     title: 'Test title',
     body: 'Test body',
     archived: false
@@ -28,6 +26,7 @@ const dbNote = {
 
 describe('Notes', () => {
 
+    //Clear the database before each test
     beforeEach((done) => {
         Note.remove({}, (err) => {
             done()
@@ -36,12 +35,13 @@ describe('Notes', () => {
 
     describe('Standard tests', () => {
 
+        //Create three notes and GET them
         it('GET /notes gets all the notes', (done) => {
-            let newNote1 = new Note(dbNote);
+            let newNote1 = new Note(testDBNote);
             newNote1.save((err, note1) => {
-                let newNote2 = new Note(dbNote);
+                let newNote2 = new Note(testDBNote);
                 newNote2.save((err, note2) => {
-                    let newNote3 = new Note(dbNote);
+                    let newNote3 = new Note(testDBNote);
                     newNote3.save((err, note3) => {
                         chai.request(server)
                             .get('/notes')
@@ -56,8 +56,9 @@ describe('Notes', () => {
             });
         });
 
+        //Create a note and GET it
         it('GET /notes/:noteID gets a note', (done) => {
-            let newNote = new Note(dbNote);
+            let newNote = new Note(testDBNote);
             newNote.save((err, storedNote) => {
                 chai.request(server)
                     .get('/notes/' + storedNote._id)
@@ -66,35 +67,37 @@ describe('Notes', () => {
                         expect(res.body.data).to.have.property('id', storedNote._id.toString());
                         expect(res.body.data).to.have.property('type', 'note');
                         expect(res.body.data).to.have.property('attributes');
-                        expect(res.body.data.attributes).to.have.property('title', apiNote.attributes.title);
-                        expect(res.body.data.attributes).to.have.property('body', apiNote.attributes.body);
-                        expect(res.body.data.attributes).to.have.property('archived', apiNote.attributes.archived);
+                        expect(res.body.data.attributes).to.have.property('title', testAPINote.attributes.title);
+                        expect(res.body.data.attributes).to.have.property('body', testAPINote.attributes.body);
+                        expect(res.body.data.attributes).to.have.property('archived', testAPINote.attributes.archived);
                         done();
                     });
             });
         });
 
+        //POST a note
         it('POST /notes creates a note', (done) => {
             chai.request(server)
                 .post('/notes')
-                .send({ data: apiNote })
+                .send({ data: testAPINote })
                 .end((err, res) => {
                     expect(res).to.have.status(201);
                     expect(res).to.have.header('Location');
                     expect(res.body.data).to.have.property('id');
                     expect(res.body.data).to.have.property('type', 'note');
                     expect(res.body.data).to.have.property('attributes');
-                    expect(res.body.data.attributes).to.have.property('title', apiNote.attributes.title);
-                    expect(res.body.data.attributes).to.have.property('body', apiNote.attributes.body);
-                    expect(res.body.data.attributes).to.have.property('archived', apiNote.attributes.archived);
+                    expect(res.body.data.attributes).to.have.property('title', testAPINote.attributes.title);
+                    expect(res.body.data.attributes).to.have.property('body', testAPINote.attributes.body);
+                    expect(res.body.data.attributes).to.have.property('archived', testAPINote.attributes.archived);
                     done();
                 })
         });
 
+        //Create a note and PATCH it
         it('PATCH /notes/:noteID updates a note', (done) => {
-            let testNote = new Note(dbNote);
+            let testNote = new Note(testDBNote);
             testNote.save((err, storedNote) => {
-                let updateNote = new Object(apiNote);
+                let updateNote = new Object(testAPINote);
                 updateNote.id = storedNote._id;
                 updateNote.attributes.title = 'New test title'
                 updateNote.attributes.body = 'New test body'
@@ -115,10 +118,11 @@ describe('Notes', () => {
             });
         });
 
+        //Create three notes and DELETE them
         it('DELETE /notes deletes all the notes', (done) => {
-            new Note(dbNote).save((err, _) => {
-                new Note(dbNote).save((err, _) => {
-                    new Note(dbNote).save((err, _) => {
+            new Note(testDBNote).save((err, _) => {
+                new Note(testDBNote).save((err, _) => {
+                    new Note(testDBNote).save((err, _) => {
                         chai.request(server)
                             .delete('/notes')
                             .end((err, res) => {
@@ -133,8 +137,9 @@ describe('Notes', () => {
             });
         });
 
+        //Create a note and DELETE it
         it('DELETE /notes/:noteID deletes a note', (done) => {
-            new Note(dbNote).save((err, storedNote) => {
+            new Note(testDBNote).save((err, storedNote) => {
                 chai.request(server)
                     .delete('/notes/' + storedNote._id)
                     .end((err, res) => {
