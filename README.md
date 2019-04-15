@@ -31,13 +31,13 @@ All requests and responses should conform to the [JSON:API specification](https:
 
 ```json
 {
-    data: {
-        id: [id],
-        type: 'note',
-        attributes: {
-            title: [Note title],
-            body: [Note body],
-            archived: [true/false]
+    "data": {
+        "id": "[id]",
+        "type": "note",
+        "attributes": {
+            "title": "[Note title]",
+            "body": "[Note body]",
+            "archived": true/false
         }
     }
 }
