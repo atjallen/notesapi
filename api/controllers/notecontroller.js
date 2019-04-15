@@ -21,6 +21,9 @@ function ErrorObject(status = null, title = null, detail = null, source = null) 
 const SERVER_ERROR = new ErrorObject(500, 'Server Error', 'The server encountered an error')
 
 function APINote(dbNote) {
+    if (!dbNote) {
+        return null;
+    }
     this.id = dbNote._id;
     this.type = 'note';
     this.attributes = {
@@ -31,6 +34,9 @@ function APINote(dbNote) {
 }
 
 function DBNote(apiNote) {
+    if (!apiNote) {
+        return null;
+    }
     this.title = apiNote.attributes.title;
     this.body = apiNote.attributes.body;
     this.archived = apiNote.attributes.archived;
@@ -43,7 +49,7 @@ let fullURL = (req) => {
     return req.protocol + '://' + req.get('host') + req.originalUrl;
 }
 
-exports.listNotes = (_, res) => {
+exports.getAllNotes = (_, res) => {
     Note.find({}, (err, notes) => {
         if (err) {
             res.status(500).send({ errors: [SERVER_ERROR] });
