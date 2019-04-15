@@ -58,12 +58,12 @@ describe('Notes', () => {
 
         it('GET /notes/:noteID gets a note', (done) => {
             let newNote = new Note(dbNote);
-            newNote.save((err, note) => {
+            newNote.save((err, storedNote) => {
                 chai.request(server)
-                    .get('/notes/' + note._id)
+                    .get('/notes/' + storedNote._id)
                     .end((err, res) => {
                         expect(res).to.have.status(200);
-                        expect(res.body.data).to.have.property('id', note._id.toString());
+                        expect(res.body.data).to.have.property('id', storedNote._id.toString());
                         expect(res.body.data).to.have.property('type', 'note');
                         expect(res.body.data).to.have.property('attributes');
                         expect(res.body.data.attributes).to.have.property('title', apiNote.attributes.title);
@@ -139,7 +139,10 @@ describe('Notes', () => {
                     .delete('/notes/' + storedNote._id)
                     .end((err, res) => {
                         expect(res).to.have.status(204);
-                        done();
+                        Note.findOne({ _id: storedNote._id }, (err, deletedNote) => {
+                            expect(deletedNote).to.be.null;
+                            done();
+                        });
                     });
             });
         });
@@ -176,7 +179,7 @@ describe('Notes', () => {
 
         describe('Invalid URL', () => {
 
-            it('An HTTP request to an invalid URL should return a 404 error', (done) => {
+            it('An HTTP request to an invalid URL returns a 404 error', (done) => {
                 chai.request(server)
                     .get('/badURL')
                     .end((err, res) => {

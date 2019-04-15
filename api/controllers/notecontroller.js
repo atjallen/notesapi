@@ -52,8 +52,11 @@ let fullURL = (req) => {
 exports.getAllNotes = (req, res) => {
     Note.find({}, (err, notes) => {
         if (err) {
-            res.status(500).send({ errors: [SERVER_ERROR] });
-            return;
+            switch (err.name) {
+                default:
+                    res.status(500).send({ errors: [SERVER_ERROR] });
+                    return;
+            }
         }
         res.status(200).json({ data: notes.map((note) => new APINote(note)) });
     });
@@ -63,8 +66,11 @@ exports.createNote = (req, res) => {
     let newNote = new Note(new DBNote(req.body.data));
     newNote.save((err, note) => {
         if (err) {
-            res.status(500).send({ errors: [SERVER_ERROR] });
-            return;
+            switch (err.name) {
+                default:
+                    res.status(500).send({ errors: [SERVER_ERROR] });
+                    return;
+            }
         }
         if (note) {
             res.set('Location', fullURL(req).split('?').shift() + '/' + note._id);
