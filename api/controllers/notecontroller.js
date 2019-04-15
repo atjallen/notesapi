@@ -49,7 +49,7 @@ let fullURL = (req) => {
     return req.protocol + '://' + req.get('host') + req.originalUrl;
 }
 
-exports.getAllNotes = (_, res) => {
+exports.getAllNotes = (req, res) => {
     Note.find({}, (err, notes) => {
         if (err) {
             res.status(500).send({ errors: [SERVER_ERROR] });
@@ -128,3 +128,16 @@ exports.deleteNote = (req, res) => {
         }
     });
 };
+
+exports.deleteAllNotes = (req, res) => {
+    Note.deleteMany({}, (err, results) => {
+        if (err) {
+            switch (err.name) {
+                default:
+                    res.status(500).send({ errors: [SERVER_ERROR] });
+                    return;
+            }
+        }
+        res.sendStatus(204);
+    });
+}

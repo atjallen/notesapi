@@ -115,9 +115,26 @@ describe('Notes', () => {
             });
         });
 
+        it('DELETE /notes deletes all the notes', (done) => {
+            new Note(dbNote).save((err, _) => {
+                new Note(dbNote).save((err, _) => {
+                    new Note(dbNote).save((err, _) => {
+                        chai.request(server)
+                            .delete('/notes')
+                            .end((err, res) => {
+                                expect(res).to.have.status(204);
+                                Note.find({}, (err, notes) => {
+                                    expect(notes).to.be.empty;
+                                    done();
+                                });
+                            });
+                    });
+                });
+            });
+        });
+
         it('DELETE /notes/:noteID deletes a note', (done) => {
-            let testNote = new Note(dbNote);
-            testNote.save((err, storedNote) => {
+            new Note(dbNote).save((err, storedNote) => {
                 chai.request(server)
                     .delete('/notes/' + storedNote._id)
                     .end((err, res) => {
