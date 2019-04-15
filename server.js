@@ -12,7 +12,8 @@ let app = express(),
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-mongoose.connect('mongodb://localhost/NotedDB');
+//Replace this with your own connection string:
+mongoose.connect('mongodb://localhost/NotesDB');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,6 +27,6 @@ app.use((req, res) => {
 });
 app.listen(port);
 
-console.log('Notes server started on port ' + port);
+console.log('Notes API started on port ' + port);
 
 module.exports = app;
