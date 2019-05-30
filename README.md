@@ -1,4 +1,4 @@
-# Notes API
+# notes-api
 An API that allows you to manage notes
 
 ## Prerequisites
