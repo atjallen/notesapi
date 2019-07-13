@@ -27,7 +27,7 @@ The API has the following functionality:
 - Delete all the notes
 - Archive a note
 
-All requests and responses should conform to the [JSON:API specification](https://jsonapi.org/). Essentially, to make a request to the API, make the request to the correct URL (either `/notes` or `/notes/[note id]`) and, if the request requires that you include a note as the body, format it as JSON like so:
+All requests and responses should conform to the [JSON:API specification](https://jsonapi.org/). Essentially, to make a request to the API, make the request to the correct URL (either `/notes` or `/notes/:noteId`) and, if the request requires that you include a note as the body, format it as JSON like so:
 
 ```json
 {
@@ -50,7 +50,7 @@ If a note is included in the response to a request, it will be formatted like th
 ### Retrieve a note
 
 ```http
-GET /notes/[note id]
+GET /notes/:noteId
 ```
 
 Returns a single note from the database according to its id.
@@ -74,7 +74,7 @@ Stores the note included in the body of the request in the database.
 ### Update a note
 
 ```http
-PATCH /notes/[note id]
+PATCH /notes/:noteId
 ```
 
 Updates the note with the corresponding id in the database by replacing it with the note included in the body of the request.
@@ -82,7 +82,7 @@ Updates the note with the corresponding id in the database by replacing it with 
 ### Delete a note
 
 ```http
-DELETE /notes/[note id]
+DELETE /notes/:noteId
 ```
 
 Delete the note with the corresponding id from the database.
@@ -98,7 +98,7 @@ Delete all the notes from the database.
 ### Archive a note
 
 ```http
-PATCH /notes/[note id]
+PATCH /notes/:noteId
 ```
 
 Whether a note is archived or not is determined by a flag on each note. Therefore, to archive a note, simply update it and set its `archived` flag to `true`.
